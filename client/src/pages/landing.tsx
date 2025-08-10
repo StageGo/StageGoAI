@@ -26,9 +26,11 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
-                <GraduationCap className="text-white h-5 w-5" />
-              </div>
+              <img 
+                src="/attached_assets/Flèche noire sur cercle blanc_1754849198190.png" 
+                alt="StageGo Logo" 
+                className="w-8 h-8 rounded-lg"
+              />
               <span className="text-xl font-bold text-primary">StageGo</span>
             </div>
             
@@ -285,9 +287,11 @@ export default function Landing() {
           <div className="grid md:grid-cols-4 gap-8">
             <div className="md:col-span-2">
               <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-                  <GraduationCap className="text-white h-5 w-5" />
-                </div>
+                <img 
+                  src="/attached_assets/Flèche noire sur cercle blanc_1754849198190.png" 
+                  alt="StageGo Logo" 
+                  className="w-8 h-8 rounded-lg"
+                />
                 <span className="text-xl font-bold">StageGo</span>
               </div>
               <p className="text-gray-300 mb-4">
