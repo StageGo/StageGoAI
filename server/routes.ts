@@ -2,24 +2,143 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import Stripe from "stripe";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
 import { generateCoverLetter } from "./openai";
-import { insertCoverLetterSchema, updateUserSchema } from "@shared/schema";
+import { insertCoverLetterSchema, updateUserSchema, insertUserSchema, loginSchema } from "@shared/schema";
+import session from "express-session";
+import connectPg from "connect-pg-simple";
 
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: "2025-01-27.acacia",
+  apiVersion: "2023-10-16",
 }) : null;
 
-export async function registerRoutes(app: Express): Promise<Server> {
-  // Auth middleware
-  await setupAuth(app);
+// Custom authentication middleware
+const isAuthenticated = (req: any, res: any, next: any) => {
+  if (req.session?.userId) {
+    return next();
+  }
+  return res.status(401).json({ message: "Unauthorized" });
+};
 
-  // Auth routes
+// Session configuration
+function getSession() {
+  const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
+  const pgStore = connectPg(session);
+  const sessionStore = new pgStore({
+    conString: process.env.DATABASE_URL,
+    createTableIfMissing: false,
+    ttl: sessionTtl,
+    tableName: "sessions",
+  });
+  return session({
+    secret: process.env.SESSION_SECRET || "stagego-secret-key-dev",
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: sessionTtl,
+    },
+  });
+}
+
+export async function registerRoutes(app: Express): Promise<Server> {
+  // Session middleware
+  app.use(getSession());
+
+  // Register route
+  app.post('/api/auth/register', async (req, res) => {
+    try {
+      const userData = insertUserSchema.parse(req.body);
+      
+      // Check if user already exists
+      const existingUser = await storage.getUserByEmail(userData.email);
+      if (existingUser) {
+        return res.status(400).json({ message: "Email already registered" });
+      }
+
+      // Create user
+      const user = await storage.createUser(userData);
+      
+      // Create session
+      (req.session as any).userId = user.id;
+      
+      res.json({ message: "User registered successfully", userId: user.id });
+    } catch (error) {
+      console.error("Error registering user:", error);
+      res.status(400).json({ message: "Failed to register user" });
+    }
+  });
+
+  // Create demo account
+  app.post('/api/auth/create-demo', async (req, res) => {
+    try {
+      // Check if demo user already exists
+      const existingUser = await storage.getUserByEmail('demo@stagego.com');
+      if (!existingUser) {
+        // Create demo user
+        const demoUser = await storage.createUser({
+          email: 'demo@stagego.com',
+          password: 'demo123',
+          firstName: 'Jean',
+          lastName: 'Dupont',
+          university: 'Université Paris-Sorbonne',
+          fieldOfStudy: 'Informatique',
+          languages: ['Français', 'Anglais', 'Espagnol'],
+          countriesOfInterest: ['États-Unis', 'Canada', 'Royaume-Uni'],
+        });
+        console.log('Demo user created:', demoUser.id);
+      }
+      res.json({ message: "Demo user ready" });
+    } catch (error) {
+      console.error("Error creating demo user:", error);
+      res.status(500).json({ message: "Failed to create demo user" });
+    }
+  });
+
+  // Login route
+  app.post('/api/auth/login', async (req, res) => {
+    try {
+      const { email, password } = loginSchema.parse(req.body);
+      
+      const user = await storage.verifyUser(email, password);
+      if (!user) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      // Create session
+      (req.session as any).userId = user.id;
+      
+      res.json({ message: "Login successful", userId: user.id });
+    } catch (error) {
+      console.error("Error logging in:", error);
+      res.status(401).json({ message: "Invalid credentials" });
+    }
+  });
+
+  // Logout route
+  app.post('/api/auth/logout', (req, res) => {
+    req.session?.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Could not log out" });
+      }
+      res.json({ message: "Logout successful" });
+    });
+  });
+
+  // Get current user
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session.userId;
       const user = await storage.getUser(userId);
-      res.json(user);
+      
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      // Don't send password
+      const { password, ...userWithoutPassword } = user;
+      res.json(userWithoutPassword);
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
@@ -29,10 +148,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // User profile routes
   app.patch('/api/user/profile', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session.userId;
       const updates = updateUserSchema.parse(req.body);
       const user = await storage.updateUser(userId, updates);
-      res.json(user);
+      
+      // Don't send password
+      const { password, ...userWithoutPassword } = user;
+      res.json(userWithoutPassword);
     } catch (error) {
       console.error("Error updating profile:", error);
       res.status(400).json({ message: "Failed to update profile" });
@@ -42,7 +164,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Cover letter routes
   app.post('/api/cover-letters/generate', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session.userId;
       const user = await storage.getUser(userId);
 
       if (!user) {
@@ -108,7 +230,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/cover-letters', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session.userId;
       const letters = await storage.getCoverLettersByUser(userId);
       res.json(letters);
     } catch (error) {
@@ -127,7 +249,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Check if user owns this letter
-      const userId = req.user.claims.sub;
+      const userId = req.session.userId;
       if (letter.userId !== userId) {
         return res.status(403).json({ message: "Access denied" });
       }
@@ -145,7 +267,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(500).json({ message: "Stripe not configured. Please add STRIPE_SECRET_KEY." });
     }
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.session.userId;
       const user = await storage.getUser(userId);
 
       if (!user) {
@@ -153,10 +275,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       if (user.stripeSubscriptionId) {
-        const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId);
+        const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId, {
+          expand: ['latest_invoice.payment_intent'],
+        });
         return res.json({
           subscriptionId: subscription.id,
-          clientSecret: typeof subscription.latest_invoice === 'object' && subscription.latest_invoice?.payment_intent && typeof subscription.latest_invoice.payment_intent === 'object' ? subscription.latest_invoice.payment_intent.client_secret : null,
+          clientSecret: subscription.latest_invoice && 
+            typeof subscription.latest_invoice === 'object' && 
+            subscription.latest_invoice.payment_intent &&
+            typeof subscription.latest_invoice.payment_intent === 'object' 
+            ? subscription.latest_invoice.payment_intent.client_secret : null,
         });
       }
 
@@ -175,6 +303,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           price_data: {
             currency: 'eur',
             unit_amount: 499, // 4.99 EUR in cents
+            product_data: {
+              name: 'StageGo Premium',
+            },
             recurring: {
               interval: 'month',
             },
@@ -188,7 +319,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json({
         subscriptionId: subscription.id,
-        clientSecret: typeof subscription.latest_invoice === 'object' && subscription.latest_invoice?.payment_intent && typeof subscription.latest_invoice.payment_intent === 'object' ? subscription.latest_invoice.payment_intent.client_secret : null,
+        clientSecret: subscription.latest_invoice && 
+          typeof subscription.latest_invoice === 'object' && 
+          subscription.latest_invoice.payment_intent &&
+          typeof subscription.latest_invoice.payment_intent === 'object' 
+          ? subscription.latest_invoice.payment_intent.client_secret : null,
       });
     } catch (error: any) {
       console.error("Error creating subscription:", error);

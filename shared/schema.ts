@@ -28,18 +28,20 @@ export const sessions = pgTable(
 // (IMPORTANT) This table is mandatory for Replit Auth, don't drop it.
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  email: varchar("email").unique(),
-  firstName: varchar("first_name"),
-  lastName: varchar("last_name"),
+  email: varchar("email").unique().notNull(),
+  password: varchar("password").notNull(),
+  firstName: varchar("first_name").notNull(),
+  lastName: varchar("last_name").notNull(),
   profileImageUrl: varchar("profile_image_url"),
-  university: varchar("university"),
-  fieldOfStudy: varchar("field_of_study"),
-  languages: text("languages").array(),
-  countriesOfInterest: text("countries_of_interest").array(),
+  university: varchar("university").notNull(),
+  fieldOfStudy: varchar("field_of_study").notNull(),
+  languages: text("languages").array().notNull(),
+  countriesOfInterest: text("countries_of_interest").array().notNull(),
   stripeCustomerId: varchar("stripe_customer_id"),
   stripeSubscriptionId: varchar("stripe_subscription_id"),
   isPremium: boolean("is_premium").default(false),
   remainingCredits: integer("remaining_credits").default(3),
+  isEmailVerified: boolean("is_email_verified").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -61,6 +63,16 @@ export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+  stripeCustomerId: true,
+  stripeSubscriptionId: true,
+  isPremium: true,
+  remainingCredits: true,
+  isEmailVerified: true,
+});
+
+export const loginSchema = z.object({
+  email: z.string().email("Email invalide"),
+  password: z.string().min(1, "Mot de passe requis"),
 });
 
 export const updateUserSchema = createInsertSchema(users).partial().omit({
@@ -77,5 +89,6 @@ export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type UpdateUser = z.infer<typeof updateUserSchema>;
+export type LoginUser = z.infer<typeof loginSchema>;
 export type CoverLetter = typeof coverLetters.$inferSelect;
 export type InsertCoverLetter = z.infer<typeof insertCoverLetterSchema>;

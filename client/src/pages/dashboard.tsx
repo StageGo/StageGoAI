@@ -97,7 +97,15 @@ export default function Dashboard() {
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={() => window.location.href = "/api/logout"}
+                onClick={async () => {
+                  try {
+                    await apiRequest("POST", "/api/auth/logout");
+                    window.location.href = "/";
+                  } catch (error) {
+                    console.error("Logout error:", error);
+                    window.location.href = "/";
+                  }
+                }}
               >
                 Déconnexion
               </Button>

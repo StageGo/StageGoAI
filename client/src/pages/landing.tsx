@@ -41,10 +41,10 @@ export default function Landing() {
             <div className="flex items-center space-x-4">
               {!isLoading && !isAuthenticated && (
                 <>
-                  <Button variant="ghost" onClick={() => window.location.href = "/api/login"}>
+                  <Button variant="ghost" onClick={() => window.location.href = "/login"}>
                     Connexion
                   </Button>
-                  <Button onClick={() => window.location.href = "/api/login"} className="bg-gradient-to-r from-primary to-accent hover:opacity-90">
+                  <Button onClick={() => window.location.href = "/register"} className="bg-gradient-to-r from-primary to-accent hover:opacity-90">
                     Inscription
                   </Button>
                 </>
