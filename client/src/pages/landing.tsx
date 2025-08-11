@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { GraduationCap, Brain, Globe, ChartLine, Rocket, CheckCircle } from "lucide-react";
+import { Brain, Globe, ChartLine, CheckCircle } from "lucide-react";
 
 export default function Landing() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -22,25 +22,19 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-neutral">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
+      <nav className="absolute top-0 left-0 w-full z-50 bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex-1"></div>
             <div className="flex items-center space-x-2">
-              <img 
-                src="/attached_assets/Flèche noire sur cercle blanc_1754849198190.png" 
-                alt="StageGo Logo" 
+              <img
+                src="/attached_assets/Flèche noire sur cercle blanc_1754849198190.png"
+                alt="StageGo Logo"
                 className="w-8 h-8 rounded-lg"
               />
               <span className="text-xl font-bold text-primary">StageGo</span>
             </div>
-            
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-gray-600 hover:text-primary transition-colors">Fonctionnalités</a>
-              <a href="#pricing" className="text-gray-600 hover:text-primary transition-colors">Tarifs</a>
-              <a href="#contact" className="text-gray-600 hover:text-primary transition-colors">Contact</a>
-            </div>
-
-            <div className="flex items-center space-x-4">
+            <div className="flex-1 flex justify-end space-x-4">
               {!isLoading && !isAuthenticated && (
                 <>
                   <Button variant="ghost" onClick={() => window.location.href = "/login"}>
@@ -62,52 +56,39 @@ export default function Landing() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary via-primary to-accent text-white overflow-hidden">
-        <div className="absolute inset-0 bg-black bg-opacity-10"></div>
-        <div className="absolute inset-0 opacity-10">
-          <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&w=1920&h=1080&fit=crop')] bg-cover bg-center"></div>
-        </div>
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              Décrochez votre stage de
-              <span className="text-accent"> rêve à l'étranger</span>
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-gray-100 max-w-3xl mx-auto leading-relaxed">
-              StageGo utilise l'intelligence artificielle pour générer vos candidatures et vous aide à postuler dans les universités à l'internationale
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button 
-                onClick={handleGetStarted} 
-                size="lg"
-                className="bg-accent hover:bg-accent/90 text-white px-8 py-4 text-lg font-semibold transition-all transform hover:scale-105 shadow-lg"
-              >
-                <Rocket className="mr-2 h-5 w-5" />
-                Commencer gratuitement
-              </Button>
-              <Button 
-                variant="outline" 
-                size="lg"
-                onClick={scrollToFeatures}
-                className="border-2 border-white text-white hover:bg-white hover:text-primary px-8 py-4 text-lg font-semibold transition-all"
-              >
-                Découvrir comment ça marche
-              </Button>
+      <section className="bg-gradient-to-br from-white via-primary/5 to-accent/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">
+                Trouve ton stage à l'étranger
+              </h1>
+              <p className="text-xl text-gray-600 mb-8">
+                StageGo génère tes candidatures en quelques secondes.
+              </p>
+              <div className="flex items-center gap-4">
+                <Button
+                  onClick={handleGetStarted}
+                  size="lg"
+                  className="px-8 py-6 text-lg"
+                >
+                  Commencer gratuitement
+                </Button>
+                <a
+                  href="#features"
+                  className="text-primary hover:underline"
+                  onClick={scrollToFeatures}
+                >
+                  Découvrir la plateforme
+                </a>
+              </div>
             </div>
-            <div className="mt-8 flex justify-center items-center space-x-8 text-sm text-gray-200">
-              <div className="flex items-center">
-                <CheckCircle className="text-accent mr-2 h-4 w-4" />
-                <span>3 lettres gratuites</span>
-              </div>
-              <div className="flex items-center">
-                <CheckCircle className="text-accent mr-2 h-4 w-4" />
-                <span>IA personnalisée</span>
-              </div>
-              <div className="flex items-center">
-                <CheckCircle className="text-accent mr-2 h-4 w-4" />
-                <span>Sans engagement</span>
-              </div>
+            <div className="flex justify-center">
+              <img
+                src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&w=1200&q=80"
+                alt="Aperçu StageGo"
+                className="w-full max-w-md rounded-xl shadow-lg"
+              />
             </div>
           </div>
         </div>
