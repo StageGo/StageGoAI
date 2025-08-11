@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { GraduationCap, Brain, Globe, ChartLine, Rocket, CheckCircle } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Landing() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -126,41 +127,62 @@ export default function Landing() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="text-center p-8 hover:shadow-lg transition-shadow border-0 bg-gray-50">
-              <CardContent className="pt-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Brain className="text-white h-8 w-8" />
-                </div>
-                <h3 className="text-xl font-semibold text-primary mb-4">IA Personnalisée</h3>
-                <p className="text-gray-600">
-                  Notre intelligence artificielle analyse votre profil et génère des lettres de motivation uniques et percutantes
-                </p>
-              </CardContent>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <Card className="text-center p-8 hover:shadow-lg transition-shadow border-0 bg-gray-50">
+                <CardContent className="pt-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <Brain className="text-white h-8 w-8" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-primary mb-4">IA Personnalisée</h3>
+                  <p className="text-gray-600">
+                    Notre intelligence artificielle analyse votre profil et génère des lettres de motivation uniques et percutantes
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
 
-            <Card className="text-center p-8 hover:shadow-lg transition-shadow border-0 bg-gray-50">
-              <CardContent className="pt-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Globe className="text-white h-8 w-8" />
-                </div>
-                <h3 className="text-xl font-semibold text-primary mb-4">Opportunités Mondiales</h3>
-                <p className="text-gray-600">
-                  Accédez à des milliers d'opportunités de stages dans plus de 50 pays à travers le monde
-                </p>
-              </CardContent>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <Card className="text-center p-8 hover:shadow-lg transition-shadow border-0 bg-gray-50">
+                <CardContent className="pt-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <Globe className="text-white h-8 w-8" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-primary mb-4">Opportunités Mondiales</h3>
+                  <p className="text-gray-600">
+                    Accédez à des milliers d'opportunités de stages dans plus de 50 pays à travers le monde
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
 
-            <Card className="text-center p-8 hover:shadow-lg transition-shadow border-0 bg-gray-50">
-              <CardContent className="pt-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <ChartLine className="text-white h-8 w-8" />
-                </div>
-                <h3 className="text-xl font-semibold text-primary mb-4">Suivi Intelligent</h3>
-                <p className="text-gray-600">
-                  Suivez vos candidatures en temps réel et recevez des conseils personnalisés pour améliorer votre profil
-                </p>
-              </CardContent>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <Card className="text-center p-8 hover:shadow-lg transition-shadow border-0 bg-gray-50">
+                <CardContent className="pt-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <ChartLine className="text-white h-8 w-8" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-primary mb-4">Suivi Intelligent</h3>
+                  <p className="text-gray-600">
+                    Suivez vos candidatures en temps réel et recevez des conseils personnalisés pour améliorer votre profil
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -178,23 +200,41 @@ export default function Landing() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-12">
-            <div className="text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-center"
+            >
               <div className="w-12 h-12 bg-accent text-white rounded-full flex items-center justify-center mx-auto mb-6 text-xl font-bold">1</div>
               <h3 className="text-xl font-semibold text-primary mb-4">Créez votre profil</h3>
               <p className="text-gray-600">Renseignez vos informations académiques, vos compétences et vos préférences de pays</p>
-            </div>
+            </motion.div>
 
-            <div className="text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-center"
+            >
               <div className="w-12 h-12 bg-accent text-white rounded-full flex items-center justify-center mx-auto mb-6 text-xl font-bold">2</div>
               <h3 className="text-xl font-semibold text-primary mb-4">Définissez vos critères</h3>
               <p className="text-gray-600">Choisissez le type de stage, le pays, l'entreprise et la durée souhaitée</p>
-            </div>
+            </motion.div>
 
-            <div className="text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-center"
+            >
               <div className="w-12 h-12 bg-accent text-white rounded-full flex items-center justify-center mx-auto mb-6 text-xl font-bold">3</div>
               <h3 className="text-xl font-semibold text-primary mb-4">Générez et postulez</h3>
               <p className="text-gray-600">Notre IA crée votre lettre de motivation personnalisée en quelques secondes</p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
