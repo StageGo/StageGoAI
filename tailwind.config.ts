@@ -52,7 +52,7 @@ export default {
           "5": "var(--chart-5)",
         },
         sidebar: {
-          DEFAULT: "var(--sidebar-background)",
+          DEFAULT: "var(--sidebar)",
           foreground: "var(--sidebar-foreground)",
           primary: "var(--sidebar-primary)",
           "primary-foreground": "var(--sidebar-primary-foreground)",
@@ -66,7 +66,7 @@ export default {
         "gray-600": "var(--gray-600)",
       },
       fontFamily: {
-        sans: ["var(--font-sans)"],
+        sans: ["Poppins", "var(--font-sans)"],
         serif: ["var(--font-serif)"],
         mono: ["var(--font-mono)"],
       },

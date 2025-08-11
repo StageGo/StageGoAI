@@ -106,7 +106,7 @@ export default function Login() {
                   placeholder="john.doe@email.com"
                 />
                 {form.formState.errors.email && (
-                  <p className="text-sm text-red-600 mt-1">
+                  <p className="text-sm text-destructive mt-1">
                     {form.formState.errors.email.message}
                   </p>
                 )}
@@ -121,7 +121,7 @@ export default function Login() {
                   placeholder="••••••••"
                 />
                 {form.formState.errors.password && (
-                  <p className="text-sm text-red-600 mt-1">
+                  <p className="text-sm text-destructive mt-1">
                     {form.formState.errors.password.message}
                   </p>
                 )}
