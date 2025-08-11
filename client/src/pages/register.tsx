@@ -189,7 +189,7 @@ export default function Register() {
                     placeholder="John"
                   />
                   {form.formState.errors.firstName && (
-                    <p className="text-sm text-red-600 mt-1">
+                    <p className="text-sm text-destructive mt-1">
                       {form.formState.errors.firstName.message}
                     </p>
                   )}
@@ -202,7 +202,7 @@ export default function Register() {
                     placeholder="Doe"
                   />
                   {form.formState.errors.lastName && (
-                    <p className="text-sm text-red-600 mt-1">
+                    <p className="text-sm text-destructive mt-1">
                       {form.formState.errors.lastName.message}
                     </p>
                   )}
@@ -218,7 +218,7 @@ export default function Register() {
                   placeholder="john.doe@email.com"
                 />
                 {form.formState.errors.email && (
-                  <p className="text-sm text-red-600 mt-1">
+                  <p className="text-sm text-destructive mt-1">
                     {form.formState.errors.email.message}
                   </p>
                 )}
@@ -234,7 +234,7 @@ export default function Register() {
                     placeholder="••••••••"
                   />
                   {form.formState.errors.password && (
-                    <p className="text-sm text-red-600 mt-1">
+                    <p className="text-sm text-destructive mt-1">
                       {form.formState.errors.password.message}
                     </p>
                   )}
@@ -248,7 +248,7 @@ export default function Register() {
                     placeholder="••••••••"
                   />
                   {form.formState.errors.confirmPassword && (
-                    <p className="text-sm text-red-600 mt-1">
+                    <p className="text-sm text-destructive mt-1">
                       {form.formState.errors.confirmPassword.message}
                     </p>
                   )}
@@ -270,7 +270,7 @@ export default function Register() {
                       placeholder="Université de la Sorbonne"
                     />
                     {form.formState.errors.university && (
-                      <p className="text-sm text-red-600 mt-1">
+                      <p className="text-sm text-destructive mt-1">
                         {form.formState.errors.university.message}
                       </p>
                     )}
@@ -291,7 +291,7 @@ export default function Register() {
                       </SelectContent>
                     </Select>
                     {form.formState.errors.fieldOfStudy && (
-                      <p className="text-sm text-red-600 mt-1">
+                      <p className="text-sm text-destructive mt-1">
                         {form.formState.errors.fieldOfStudy.message}
                       </p>
                     )}

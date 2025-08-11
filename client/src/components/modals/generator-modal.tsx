@@ -245,16 +245,16 @@ export default function GeneratorModal({ open, onOpenChange, user }: GeneratorMo
             </div>
 
             {!user.isPremium && (user.remainingCredits || 0) <= 0 && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                <p className="text-yellow-800 text-sm">
-                  Vous n'avez plus de crédits gratuits. 
-                  <Button 
-                    variant="link" 
-                    className="p-0 h-auto text-yellow-800 underline"
-                    onClick={() => window.location.href = "/subscribe"}
+              <div className="bg-accent/10 border border-accent/20 rounded-lg p-4">
+                <p className="text-accent text-sm">
+                  Vous n'avez plus de crédits gratuits.
+                  <Button
+                    variant="link"
+                    className="p-0 h-auto text-accent underline"
+                    onClick={() => (window.location.href = "/subscribe")}
                   >
                     Passez au premium
-                  </Button> pour générer des lettres illimitées.
+                  </Button>{" "}pour générer des lettres illimitées.
                 </p>
               </div>
             )}
