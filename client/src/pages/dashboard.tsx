@@ -12,7 +12,7 @@ import Loading from "@/components/ui/loading";
 import GeneratorModal from "@/components/modals/generator-modal";
 import ProfileModal from "@/components/modals/profile-modal";
 import { useState } from "react";
-import { GraduationCap, Crown, FileText, Download, Copy, User, Wand2 } from "lucide-react";
+import { Crown, FileText, Download, Copy, User, Wand2 } from "lucide-react";
 import type { User as UserType, CoverLetter } from "@shared/schema";
 
 export default function Dashboard() {
@@ -74,14 +74,14 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+      <nav className="bg-gradient-to-r from-primary/10 to-accent/10 shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
-              <img 
-                src="/attached_assets/Flèche noire sur cercle blanc_1754849198190.png" 
-                alt="StageGo Logo" 
-                className="w-8 h-8 rounded-lg"
+              <img
+                src="/attached_assets/Flèche noire sur cercle blanc_1754849198190.png"
+                alt="StageGo Logo"
+                className="w-10 h-10 rounded-lg"
               />
               <span className="text-xl font-bold text-primary">StageGo</span>
             </div>
@@ -117,7 +117,7 @@ export default function Dashboard() {
       </nav>
 
       {/* Dashboard Header */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-gradient-to-r from-white via-primary/5 to-accent/5 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
@@ -127,12 +127,12 @@ export default function Dashboard() {
               </p>
             </div>
             <div className="flex items-center space-x-4">
-              <Badge variant={typedUser.isPremium ? "default" : "secondary"} className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2">
+              <Badge variant={typedUser.isPremium ? "default" : "secondary"} className="px-4 py-2">
                 {typedUser.isPremium ? "Premium" : `${typedUser.remainingCredits || 0} lettres restantes`}
               </Badge>
               {!typedUser.isPremium && (
                 <Button onClick={handleUpgrade} className="bg-accent text-white hover:bg-accent/90">
-                  <Crown className="mr-2 h-4 w-4" />
+                  <Crown className="mr-2 h-5 w-5" />
                   Passer Premium
                 </Button>
               )}
@@ -141,42 +141,37 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* Primary Actions */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="flex justify-center gap-6">
+          <Button
+            onClick={() => setShowGeneratorModal(true)}
+            className="p-6 h-auto bg-gradient-to-br from-primary to-accent text-white hover:opacity-90 flex flex-col items-center space-y-2"
+          >
+            <Wand2 className="h-8 w-8" />
+            <div className="text-left">
+              <div className="font-semibold">Générer une lettre</div>
+              <div className="text-sm text-gray-100">Créez une lettre de motivation personnalisée</div>
+            </div>
+          </Button>
+          <Button
+            onClick={() => setShowProfileModal(true)}
+            variant="outline"
+            className="p-6 h-auto border border-gray-200 hover:border-primary flex flex-col items-center space-y-2"
+          >
+            <User className="h-8 w-8 text-primary" />
+            <div className="text-left">
+              <div className="font-semibold text-primary">Modifier mon profil</div>
+              <div className="text-sm text-gray-600">Mettez à jour vos informations</div>
+            </div>
+          </Button>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Quick Actions */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-primary">Actions rapides</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <Button 
-                    onClick={() => setShowGeneratorModal(true)}
-                    className="p-6 h-auto bg-gradient-to-br from-primary to-accent text-white hover:opacity-90 flex-col items-start space-y-2"
-                  >
-                    <Wand2 className="h-6 w-6" />
-                    <div className="text-left">
-                      <div className="font-semibold">Générer une lettre</div>
-                      <div className="text-sm text-gray-100">Créez une lettre de motivation personnalisée</div>
-                    </div>
-                  </Button>
-                  <Button 
-                    onClick={() => setShowProfileModal(true)}
-                    variant="outline"
-                    className="p-6 h-auto border-2 hover:border-primary flex-col items-start space-y-2"
-                  >
-                    <User className="h-6 w-6 text-primary" />
-                    <div className="text-left">
-                      <div className="font-semibold text-primary">Modifier mon profil</div>
-                      <div className="text-sm text-gray-600">Mettez à jour vos informations</div>
-                    </div>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
             {/* Recent Letters */}
             <Card>
               <CardHeader>
@@ -201,38 +196,38 @@ export default function Dashboard() {
                 ) : coverLetters && coverLetters.length > 0 ? (
                   <div className="space-y-4">
                     {coverLetters.slice(0, 3).map((letter) => (
-                      <div key={letter.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-xl hover:border-primary transition-colors">
-                        <div className="flex items-center space-x-4">
-                          <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
-                            <FileText className="text-white h-5 w-5" />
+                        <div key={letter.id} className="flex items-center justify-between p-4 border border-gray-100 rounded-xl hover:shadow-sm transition-shadow">
+                          <div className="flex items-center space-x-4">
+                            <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
+                              <FileText className="text-white h-6 w-6" />
+                            </div>
+                            <div>
+                              <h3 className="font-medium text-gray-900">{letter.title}</h3>
+                              <p className="text-sm text-gray-600">
+                                {letter.company} • {letter.country} • {letter.createdAt ? new Date(letter.createdAt).toLocaleDateString('fr-FR') : 'Date inconnue'}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <h3 className="font-medium text-gray-900">{letter.title}</h3>
-                            <p className="text-sm text-gray-600">
-                              {letter.company} • {letter.country} • {letter.createdAt ? new Date(letter.createdAt).toLocaleDateString('fr-FR') : 'Date inconnue'}
-                            </p>
+                          <div className="flex items-center space-x-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => copyToClipboard(letter.content)}
+                              title="Copier"
+                            >
+                              <Copy className="h-5 w-5" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              title="Télécharger"
+                            >
+                              <Download className="h-5 w-5" />
+                            </Button>
                           </div>
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => copyToClipboard(letter.content)}
-                            title="Copier"
-                          >
-                            <Copy className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            title="Télécharger"
-                          >
-                            <Download className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
                 ) : (
                   <div className="text-center py-8">
                     <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
